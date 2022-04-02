@@ -44,7 +44,7 @@ public class MovieDTO implements Serializable{
 		this(entity);
 		this.genre = new GenreDTO(genre); 	
 	}
-
+	
 	public Long getId() {
 		return id;
 	}

@@ -23,15 +23,10 @@ public class ReviewResource {
 	private ReviewService service;
 	
 	@PostMapping
-    public ResponseEntity<ReviewDTO> insertReview(@Valid @RequestBody ReviewDTO dto){
-        URI uri = ServletUriComponentsBuilder
-                .fromCurrentRequestUri()
-                .path("/{id}")
-                .buildAndExpand(dto.getMovieId())
-                .toUri();
-        String text = dto.getText();
-        Long movieId = dto.getMovieId();
-        ReviewDTO newDto = service.insertReview(text, movieId);
-        return ResponseEntity.created(uri).body(newDto);
-    }
+	public ResponseEntity<ReviewDTO> insert(@Valid @RequestBody ReviewDTO dto){
+		dto = service.insert(dto);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+				.buildAndExpand(dto.getId()).toUri();
+		return ResponseEntity.created(uri).body(dto);
+	}
 }

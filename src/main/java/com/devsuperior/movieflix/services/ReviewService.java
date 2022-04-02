@@ -10,7 +10,6 @@ import com.devsuperior.movieflix.entities.Review;
 import com.devsuperior.movieflix.entities.User;
 import com.devsuperior.movieflix.repositories.MovieRepository;
 import com.devsuperior.movieflix.repositories.ReviewRepository;
-import com.devsuperior.movieflix.repositories.UserRepository;
 
 @Service
 public class ReviewService {
@@ -19,26 +18,23 @@ public class ReviewService {
 	private ReviewRepository repository;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private MovieRepository movieRepository;
 
     @Autowired
     private AuthService authService;
 	
 	@Transactional
-    public ReviewDTO insertReview(String text, Long movieId){
-        Review entity = new Review();
-        User user = authService.authenticated();
-        User userEntity = userRepository.findByEmail(user.getUsername());
-        Movie movie = movieRepository.getOne(movieId);
-        entity.setId(entity.getId());
-        entity.setUser(userEntity);
+    public ReviewDTO insert(ReviewDTO dto){
+        
+		Review entity = new Review();
+		entity.setText(dto.getText());
+		User user = authService.authenticated();
+		entity.setUser(user);
+        Movie movie = movieRepository.getOne(dto.getMovieId());
         entity.setMovie(movie);
-        entity.setText(text);
-        repository.save(entity);
-        return new ReviewDTO(entity);
+        
+        entity = repository.save(entity);
+        
+        return new ReviewDTO(entity,user);
     }
-	
 }
